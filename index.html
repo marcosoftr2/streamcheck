@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StreamCheck by rojixlab | SD, HD & 4K Speed Test</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📡</text></svg>">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
             --bg-body: #0a0e17;
@@ -15,14 +19,12 @@
             --text-main: #ffffff;
             --text-muted: #8b9bb4;
             --kofi: #29abe0;
-            --success: #a8ff78;
-            --warning: #ff4b2b;
         }
 
         * { box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             display: flex;
@@ -55,21 +57,12 @@
             border: 1px solid rgba(255,255,255,0.05);
             display: flex;
             flex-direction: column;
-            justify-content: center;
         }
 
-        h1 { 
-            font-size: 1rem; 
-            color: var(--text-muted); 
-            font-weight: 400; 
-            margin-bottom: 20px; 
-            letter-spacing: 2px; 
-            text-transform: uppercase; 
-        }
+        h1 { font-size: 0.9rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
 
-        /* Speed Display */
         .speed-number {
-            font-size: 5.5rem;
+            font-size: 5rem;
             font-weight: 800;
             background: linear-gradient(to right, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -77,9 +70,7 @@
             line-height: 1;
             margin: 0;
         }
-        .unit { color: var(--text-muted); font-size: 1.1rem; margin-top: 10px; }
 
-        /* Progress Bar */
         .progress-container {
             width: 100%;
             background: rgba(255,255,255,0.05);
@@ -89,15 +80,15 @@
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
         }
+
         .progress-bar {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             box-shadow: 0 0 15px var(--primary);
-            transition: width 0.2s ease;
+            transition: width 0.1s linear;
         }
 
-        /* Buttons */
         .btn-test {
             background: linear-gradient(45deg, var(--secondary), var(--primary));
             border: none;
@@ -107,61 +98,44 @@
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
             text-transform: uppercase;
             box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
         }
-        .btn-test:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(79, 172, 254, 0.5); }
-        .btn-test:disabled { filter: grayscale(1); opacity: 0.5; cursor: not-allowed; }
 
-        /* Results Area */
+        .btn-test:disabled { filter: grayscale(1); opacity: 0.5; }
+
         .quality-result {
             margin-top: 30px;
-            padding: 20px;
+            padding: 15px;
             background: rgba(0,0,0,0.2);
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 15px;
         }
-        .quality-label { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .quality-value { font-size: 1.4rem; font-weight: bold; color: var(--accent); transition: 0.5s; }
 
-        /* Footer & Donations */
-        .footer { margin-top: 60px; text-align: center; width: 100%; padding-bottom: 40px; }
+        .footer { margin-top: 50px; text-align: center; width: 100%; }
         
-        .kofi-box { 
-            display: none; 
-            margin-bottom: 35px; 
-            animation: fadeInUp 0.8s ease forwards; 
-        }
+        .kofi-box { display: none; margin-bottom: 30px; animation: fadeIn 0.8s ease forwards; }
+        
         .kofi-link {
             display: inline-flex;
             align-items: center;
             background: var(--kofi);
             color: white;
             text-decoration: none;
-            padding: 14px 30px;
+            padding: 12px 25px;
             border-radius: 50px;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(41, 171, 224, 0.3);
-            transition: 0.3s;
         }
-        .kofi-link:hover { transform: scale(1.05); background: #1f8ebc; }
-        .kofi-link img { width: 22px; margin-right: 12px; filter: brightness(0) invert(1); }
 
         .credits {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             border-top: 1px solid rgba(255,255,255,0.08);
-            padding-top: 25px;
-            max-width: 450px;
+            padding-top: 20px;
+            max-width: 400px;
             margin: 0 auto;
         }
-        .credits b { color: var(--primary); text-transform: lowercase; }
 
-        @keyframes fadeInUp { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -171,7 +145,7 @@
             <h1>Download Speed</h1>
             <div class="speed-display">
                 <p class="speed-number" id="speedValue">0.0</p>
-                <p class="unit">Mbps</p>
+                <p style="color:var(--text-muted)">Mbps</p>
             </div>
 
             <div class="progress-container">
@@ -181,13 +155,13 @@
             <button class="btn-test" id="startBtn" onclick="runSpeedTest()">Start Test</button>
 
             <div class="quality-result">
-                <p class="quality-label">Ready for Streaming:</p>
-                <p class="quality-value" id="qualityStatus">Waiting...</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">STREAMING READINESS:</p>
+                <p id="qualityStatus" style="font-size: 1.2rem; font-weight: bold; margin: 10px 0;">Waiting...</p>
             </div>
         </div>
 
-        <div class="card" style="min-height: 400px;">
-            <h1>Real-time Performance</h1>
+        <div class="card" style="min-height: 350px;">
+            <h1>Real-time Chart</h1>
             <canvas id="speedChart"></canvas>
         </div>
     </div>
@@ -195,8 +169,8 @@
     <div class="footer">
         <div id="kofiSection" class="kofi-box">
             <a href="https://ko-fi.com/rojixlab" target="_blank" class="kofi-link">
-                <img src="https://ko-fi.com/img/cup-border.png" alt="Ko-fi">
-                Support the project on Ko-fi
+                <img src="https://ko-fi.com/img/cup-border.png" width="20" style="margin-right:10px; filter: brightness(0) invert(1);">
+                Support rojixlab on Ko-fi
             </a>
         </div>
         <div class="credits">
@@ -205,18 +179,16 @@
     </div>
 
     <script>
-        // Chart Configuration
         const ctx = document.getElementById('speedChart').getContext('2d');
         const speedChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'Mbps',
                     data: [],
                     borderColor: '#00f2fe',
                     backgroundColor: 'rgba(0, 242, 254, 0.1)',
-                    borderWidth: 3,
+                    borderWidth: 2,
                     fill: true,
                     tension: 0.4,
                     pointRadius: 0
@@ -228,95 +200,68 @@
                 plugins: { legend: { display: false } },
                 scales: {
                     x: { display: false },
-                    y: { 
-                        beginAtZero: true, 
-                        grid: { color: 'rgba(255,255,255,0.05)' }, 
-                        ticks: { color: '#8b9bb4', font: { size: 10 } } 
-                    }
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }
                 }
             }
         });
 
         async function runSpeedTest() {
-            const startBtn = document.getElementById('startBtn');
-            const speedValue = document.getElementById('speedValue');
-            const progressBar = document.getElementById('progressBar');
-            const qualityStatus = document.getElementById('qualityStatus');
+            const btn = document.getElementById('startBtn');
+            const speedVal = document.getElementById('speedValue');
+            const progress = document.getElementById('progressBar');
+            const quality = document.getElementById('qualityStatus');
             const kofi = document.getElementById('kofiSection');
 
-            // Initialization
-            startBtn.disabled = true;
-            startBtn.innerText = "Testing...";
+            // Reset UI
+            btn.disabled = true;
+            btn.innerText = "Testing...";
             kofi.style.display = "none";
-            speedValue.innerText = "0.0";
-            progressBar.style.width = "0%";
-            qualityStatus.innerText = "Analyzing...";
-            qualityStatus.style.color = "var(--text-muted)";
-            
             speedChart.data.labels = [];
             speedChart.data.datasets[0].data = [];
-            speedChart.update();
-
-            // Large test file (Unsplash ~10MB)
-            const testUrl = "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=5000";
-            const startTime = new Date().getTime();
-
+            
+            // Archivo de prueba confiable (Cloudflare speed test bin)
+            const testUrl = "https://cloudflare.cachefly.net/10mb.test";
+            const startTime = performance.now();
+            
             try {
-                const response = await fetch(testUrl + "?nocache=" + startTime);
+                const response = await fetch(testUrl + "?cache=" + startTime);
                 const reader = response.body.getReader();
                 let loaded = 0;
-                const totalBytes = 10485760; // Estimated 10MB
+                const total = 10485760; // 10MB exactos
 
                 while(true) {
                     const {done, value} = await reader.read();
                     if (done) break;
                     
                     loaded += value.length;
-                    const duration = (new Date().getTime() - startTime) / 1000;
+                    const elapsed = (performance.now() - startTime) / 1000;
                     
-                    if (duration > 0) {
-                        const currentMbps = ((loaded * 8) / (1024 * 1024) / duration).toFixed(1);
+                    if (elapsed > 0) {
+                        const mbps = ((loaded * 8) / (1024 * 1024) / elapsed).toFixed(1);
+                        speedVal.innerText = mbps;
+                        progress.style.width = (loaded / total * 100) + "%";
                         
-                        // Update UI
-                        speedValue.innerText = currentMbps;
-                        progressBar.style.width = Math.min((loaded / totalBytes) * 100, 100) + "%";
-                        
-                        // Update Graph
                         speedChart.data.labels.push("");
-                        speedChart.data.datasets[0].data.push(currentMbps);
+                        speedChart.data.datasets[0].data.push(mbps);
                         speedChart.update('none');
                     }
                 }
 
-                // Conclusion
-                const finalSpeed = parseFloat(speedValue.innerText);
-                setQuality(finalSpeed);
+                // Final Quality Check
+                const finalMbps = parseFloat(speedVal.innerText);
+                if (finalMbps < 5) { quality.innerText = "SD Quality (480p)"; quality.style.color = "#ff4b2b"; }
+                else if (finalMbps < 15) { quality.innerText = "HD Quality (1080p)"; quality.style.color = "#00d2ff"; }
+                else if (finalMbps < 25) { quality.innerText = "2K / Super HD"; quality.style.color = "#a8ff78"; }
+                else { quality.innerText = "4K Ultra HD Cinema"; quality.style.color = "#f093fb"; }
+                
                 kofi.style.display = "block";
 
-            } catch (error) {
-                speedValue.innerText = "ERR";
-                qualityStatus.innerText = "Connection failed";
-                qualityStatus.style.color = "var(--warning)";
+            } catch (e) {
+                speedVal.innerText = "ERR";
+                quality.innerText = "CORS Error or Connection Timeout";
             } finally {
-                startBtn.disabled = false;
-                startBtn.innerText = "Test Again";
-            }
-        }
-
-        function setQuality(speed) {
-            const status = document.getElementById('qualityStatus');
-            if (speed < 5) {
-                status.innerText = "SD Quality (480p)";
-                status.style.color = "var(--warning)";
-            } else if (speed < 15) {
-                status.innerText = "HD Quality (1080p)";
-                status.style.color = "var(--secondary)";
-            } else if (speed < 25) {
-                status.innerText = "2K / Super HD Quality";
-                status.style.color = "var(--success)";
-            } else {
-                status.innerText = "4K Ultra HD Cinema";
-                status.style.color = "var(--accent)";
+                btn.disabled = false;
+                btn.innerText = "Test Again";
             }
         }
     </script>
